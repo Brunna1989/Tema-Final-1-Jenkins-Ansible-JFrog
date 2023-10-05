@@ -1,18 +1,10 @@
 FROM jenkins/jenkins:lts
 
+# Instale o Packer e o Ansible
 USER root
+RUN apt-get update && apt-get install -y ansible unzip && rm -rf /var/lib/apt/lists/*
+RUN curl -o /usr/local/bin/packer -L https://releases.hashicorp.com/packer/1.7.4/packer_1.7.4_linux_amd64 && chmod +x /usr/local/bin/packer
 
-# Instalação do Packer
-RUN apt-get update && \
-    apt-get install -y unzip && \
-    curl -O https://releases.hashicorp.com/packer/1.7.0/packer_1.7.0_linux_amd64.zip && \
-    unzip packer_1.7.0_linux_amd64.zip && \
-    mv packer /usr/local/bin/
-
-# Instalação do Ansible
-RUN apt-get update && \
-    apt-get install -y software-properties-common && \
-    apt-add-repository --yes --update ppa:ansible/ansible && \
-    apt-get install -y ansible
+# Continue com a configuração do Jenkins, se necessário
 
 USER jenkins

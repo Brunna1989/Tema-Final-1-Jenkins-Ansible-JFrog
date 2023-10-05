@@ -3,6 +3,9 @@ version: '3'
 services:
   jenkins:
     image: jenkins/jenkins:lts
+    build:
+      context: .
+      dockerfile: Dockerfile  # Use o Dockerfile personalizado
     container_name: jenkins
     volumes:
       - jenkins_home:/var/jenkins_home
@@ -10,9 +13,9 @@ services:
       - "8080:8080"
     networks:
       - jenkins-network
-    privileged: true  # Permite o acesso ao daemon do Docker no host
+    privileged: true
     environment:
-      - DOCKER_HOST=tcp://host.docker.internal:2375  # Acesso ao daemon do Docker no host
+      - DOCKER_HOST=tcp://host.docker.internal:2375
     depends_on:
       - artifactory
 
