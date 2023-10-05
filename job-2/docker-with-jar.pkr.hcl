@@ -39,8 +39,8 @@ build {
     ]
   }
   
-  provisioner "file" {
-    source      = "build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"  # Caminho completo para o arquivo JAR
+ provisioner "file" {
+    source = "./Tema-final-1-0.0.1-SNAPSHOT.jar"
     destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
   }
   
