@@ -1,0 +1,14 @@
+{
+  "builders": [{
+    "type": "docker",
+    "image": "ubuntu",
+    "commit": true,
+    "changes": [
+      "CMD [ \"/bin/bash\" ]"
+    ]
+  }],
+  "provisioners": [{
+    "type": "ansible",
+    "playbook_file": "ansible-playbook.yml"
+  }]
+}
