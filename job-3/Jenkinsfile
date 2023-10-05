@@ -1,10 +1,16 @@
----
-- name: Configuring container
-  hosts: localhost
-  connection: local
-  become: true
+pipeline {
+    agent any
 
-  tasks:
-    - name: Install JRE
-      apt:
-        name: openjdk-11-jre
+    stages {
+        stage('Pull Dockerhub') {
+            steps {
+                sh 'docker pull brunnadocker/brunna-dornelles-tema-final-1'
+            }
+        }
+        stage('Docker run') {
+            steps {
+                sh 'docker run  -d -p 8085:8085 brunnadocker/brunna-dornelles-tema-final-1'
+            }
+        }
+    }
+}
