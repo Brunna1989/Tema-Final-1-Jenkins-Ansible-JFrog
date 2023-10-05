@@ -1,30 +1,31 @@
 pipeline {
     agent any
-    stages{
-        stage('Download Jar from JFROG') {
-            environment {
-                JFROG_PASSWORD = credentials('token_jfrog')
-            }
-            steps{
-                sh 'curl -u admin:$JFROG_PASSWORD -XGET http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.0.1-SNAPSHOT.jar --output Tema-final-1-0.0.1-SNAPSHOT-plain.jar'
+
+    stages {
+
+        stage('Retrieving WAR file from JFrog Artifactory') {
+            steps {
+                rtDownload(
+                    serverId: "tema-final-1-job-1",
+                    spec: """{
+                        "files": [
+                        {
+                            "pattern": "tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar",
+                            "target": "job-1/build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"
+                        }
+                        ]
+                    } """
+
+                    )
             }
         }
-        
-        stage('Downloading Packer and Ansible Config Files'){
-            steps{
-                git branch: 'master', url: 'https://github.com/Brunna1989/tema-final-1.git'
+
+        stage('Building a Docker image through Packer and pushing to Docker Hub') {
+        steps {
+            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                sh "packer build --var dockerhub_username=$DOCKERHUB_USERNAME --var dockerhub_password=$DOCKERHUB_PASSWORD job-02/packerConfigurations.json"
             }
-        }
-        
-        stage('Packer execution') {
-            environment {
-                DOCKERHUB_USERNAME = credentials('dockerhub_username')
-                DOCKERHUB_PASSWORD = credentials('dockerhub_password')
-            }
-            steps{
-                sh 'packer init job-2/docker-with-jar.pkr.hcl'
-                sh 'packer build -var "username=$DOCKERHUB_USERNAME" -var "password=$DOCKERHUB_PASSWORD" job-2/docker-with-jar.pkr.hcl'
-            }
+          }
         }
     }
 }
