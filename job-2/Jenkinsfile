@@ -1,47 +1,30 @@
 pipeline {
     agent any
-
-    environment {
-        CI = 'true'
-    }
-
-    stages {
-        stage('Download JAR from JFrog') {
-            steps {
-                script {
-                    def jfrogUrl = 'http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar'
-                    def jfrogUser = 'admin'
-                    def jfrogPassword = credentials('token_jfrog')
-
-                    sh "curl -u $jfrogUser:$jfrogPassword -o app.jar $jfrogUrl"
-                }
+    stages{
+        stage('Download Jar from JFROG') {
+            environment {
+                JFROG_PASSWORD = credentials('jfrog_password')
+            }
+            steps{
+                sh 'curl -u jenkins:$JFROG_PASSWORD -XGET http://localhost:8082/artifactory/img-abc/KaryonRXNettyCalculator-1.0.jar --output Calculator.jar'
             }
         }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    def packerVarFile = 'packer_vars.json'
-
-                    sh "echo '{\"dockerhub_username\": \"\", \"dockerhub_password\": \"\", \"tomcat_dir\": \"/apache-tomcat-10.0.12/webapps/Tema-final-1-0.0.1-SNAPSHOT.jar\"}' > $packerVarFile"
-                    sh "packer build -var-file=$packerVarFile packerConfigurations.json"
-                }
+        
+        stage('Downloading Packer and Ansible Config Files'){
+            steps{
+                git branch: 'main', url: 'https://github.com/YagoJanos/TemaFinal1Configs.git'
             }
         }
-
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                script {
-                    def dockerhubUsername = credentials('dockerhub-credentials').USUARIO
-                    def dockerhubPassword = credentials('dockerhub-credentials').SENHA
-                    def imageTag = "brunnadocker/brunna-dornelles-tema-final-1:1.0"  // Defina a tag desejada
-
-                    sh "docker login -u $dockerhubUsername -p $dockerhubPassword"
-                    sh "docker tag ubuntu:20.04 $imageTag"
-                    sh "docker push $imageTag"
-                }
+        
+        stage('Packer execution') {
+            environment {
+                DOCKERHUB_USERNAME = credentials('dockerhub_username')
+                DOCKERHUB_PASSWORD = credentials('dockerhub_password')
+            }
+            steps{
+                sh 'packer init docker-with-jar.pkr.hcl'
+                sh 'packer build -var "username=$DOCKERHUB_USERNAME" -var "password=$DOCKERHUB_PASSWORD" docker-with-jar.pkr.hcl'
             }
         }
     }
 }
-
