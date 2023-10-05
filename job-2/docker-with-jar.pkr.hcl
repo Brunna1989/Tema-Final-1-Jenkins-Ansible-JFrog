@@ -40,7 +40,7 @@ build {
   }
   
   provisioner "file" {
-    source = "./Tema-final-1-0.0.1-SNAPSHOT.jar"
+    source      = "C:\\Users\\Brunna Dornelles\\Documents\\Tema-final-1\\build\\libs\\Tema-final-1-0.0.1-SNAPSHOT.jar"
     destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
   }
   
@@ -60,3 +60,4 @@ build {
     }
   }
 }
+
