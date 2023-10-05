@@ -1,0 +1,12 @@
+---
+- hosts: all
+  tasks:
+    - name: Copy Artifact to Docker Build Directory
+      copy:
+        src: "{{ artefact_path }}"
+        dest: "/tmp/Tema-final-1-0.0.1-SNAPSHOT.jar"
+
+    - name: Build Docker Image
+      command: "docker build -t tema-final-1:latest /tmp"
+      args:
+        chdir: "/tmp"
