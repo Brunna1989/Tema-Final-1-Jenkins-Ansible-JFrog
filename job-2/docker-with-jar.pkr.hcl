@@ -2,7 +2,7 @@ packer {
   required_plugins {
     docker = {
       version = ">= 1.0.1"
-      source = "github.com/hashicorp/docker"
+      source  = "github.com/hashicorp/docker"
     }
   }
 }
@@ -17,12 +17,12 @@ source "docker" "ubuntu" {
 }
 
 variable "username" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "password" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -40,7 +40,7 @@ build {
   }
   
   provisioner "file" {
-    source = "./Tema-final-1-0.0.1-SNAPSHOT.jar"
+    source      = "./Tema-final-1-0.0.1-SNAPSHOT.jar"  # Corrigido o caminho para o arquivo JAR
     destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
   }
   
@@ -51,10 +51,10 @@ build {
   post-processors {
     post-processor "docker-tag" {
         repository =  "brunnadocker/brunna-dornelles-tema-final-1"
-        tags = ["0.1"]
+        tags       = ["0.1"]
     }
     post-processor "docker-push" {
-        login = true
+        login          = true
         login_username = var.username
         login_password = var.password
     }
