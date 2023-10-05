@@ -35,7 +35,8 @@ build {
   provisioner "shell" {
     inline = [
       "apt-get update",
-      "apt-get install ansible -y"
+      "apt-get install ansible -y",
+      "ls ./Tema-final-1/.gradle/build/libs"  # Comando ls para listar o conteúdo do diretório
     ]
   }
   
@@ -60,3 +61,4 @@ build {
     }
   }
 }
+
