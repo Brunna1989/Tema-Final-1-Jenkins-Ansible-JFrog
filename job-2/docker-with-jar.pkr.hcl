@@ -31,13 +31,18 @@ build {
   sources = [
     "source.docker.ubuntu"
   ]
-  
+
   provisioner "shell" {
     inline = [
       "apt-get update",
       "apt-get install ansible -y",
-      "ls ./Tema-final-1/.gradle/build/libs"  # Comando ls para listar o conteúdo do diretório
+      "ls /build/libs"  # Comando ls para listar o conteúdo do diretório dentro do contexto da imagem Docker
     ]
+  }
+
+  provisioner "file" {
+    source      = "./Tema-final-1-0.0.1-SNAPSHOT.jar"
+    destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
   }
   
   provisioner "ansible-local" {
@@ -56,4 +61,5 @@ build {
     }
   }
 }
+
 
