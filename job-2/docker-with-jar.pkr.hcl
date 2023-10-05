@@ -40,7 +40,7 @@ build {
   }
   
   provisioner "file" {
-    source      = ".gradle/build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"  # Caminho completo para o arquivo JAR
+    source      = "build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"  # Caminho completo para o arquivo JAR
     destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
   }
   
