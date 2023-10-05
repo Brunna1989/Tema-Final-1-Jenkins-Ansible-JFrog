@@ -21,18 +21,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def packerConfig = 'packerConfigurations.json'
                     def packerVarFile = 'packer_vars.json'
 
-                    writeFile file: packerVarFile, text: """
-                    {
-                      "dockerhub_username": "",
-                      "dockerhub_password": "",
-                      "tomcat_dir": "/apache-tomcat-10.0.12/webapps/Tema-final-1-0.0.1-SNAPSHOT.jar"
-                    }
-                    """
-
-                    sh "packer build -var-file=$packerVarFile $packerConfig"
+                    sh "echo '{\"dockerhub_username\": \"\", \"dockerhub_password\": \"\", \"tomcat_dir\": \"/apache-tomcat-10.0.12/webapps/Tema-final-1-0.0.1-SNAPSHOT.jar\"}' > $packerVarFile"
+                    sh "packer build -var-file=$packerVarFile packerConfigurations.json"
                 }
             }
         }
