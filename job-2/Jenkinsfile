@@ -1,57 +1,29 @@
 pipeline {
     agent any
-    environment {
-        CI = 'true'
-        ARTIFACTORY_SERVER_ID = 'tema-final-1-job-1'
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // Configure as credenciais do Docker Hub no Jenkins
-    }
-    stages {
-        stage('Download Artifact from Artifactory') {
-            steps {
-                script {
-                    def jfrogPassword = credentials('token_jfrog')
-                    def jfrogUrl = 'http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar'
-                    def downloadPath = "${env.WORKSPACE}/Tema-final-1-0.0.1-SNAPSHOT.jar"
-
-                    // Use o comando 'curl' no ambiente de script
-                    sh "curl -u admin:$jfrogPassword -o $downloadPath $jfrogUrl"
-                }
+    stages{
+        stage('Download Jar from JFROG') {
+            environment {
+                JFROG_PASSWORD = credentials('token_jfrog')
+            }
+            steps{
+                sh 'curl -u admin:$JFROG_PASSWORD -XGET http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.0.1-SNAPSHOT.jar --output Tema-final-1-0.0.1-SNAPSHOT-plain.jar'
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    def packerTemplatePath = "${env.WORKSPACE}/packer-template.json"
-                    def packerOutputPath = "${env.WORKSPACE}/docker-image"
-
-                    // Crie um arquivo de modelo Packer que use o Ansible para criar a imagem do Docker
-                    writeFile file: packerTemplatePath, text: '''
-                    {
-                      "builders": [{
-                        "type": "docker",
-                        "image": "ubuntu",
-                        "commit": true,
-                        "changes": [
-                          "CMD [ \"/bin/bash\" ]"
-                        ]
-                      }],
-                      "provisioners": [{
-                        "type": "ansible",
-                        "playbook_file": "job-2/ansible-playbook.yml"
-                      }]
-                    }
-                    '''
-
-                    // Crie um arquivo Ansible playbook (ansible-playbook.yml) que configura a imagem do Docker
-
-                    // Execute o Packer para criar a imagem
-                    sh "packer build -var 'artefact_path=$downloadPath' $packerTemplatePath"
-
-                    // Carregue a imagem do Docker no Docker Hub
-                    sh "docker login -u $DOCKER_HUB_CREDENTIALS_USR -p $DOCKER_HUB_CREDENTIALS_PSW"
-                    sh "docker tag ubuntu brunnadocker/brunna-tema-final-1"
-                    sh "docker push brunnadocker/brunna-tema-final-1"
-                }
+        
+        stage('Downloading Packer and Ansible Config Files'){
+            steps{
+                git branch: 'master', url: 'https://github.com/Brunna1989/tema-final-1.git'
+            }
+        }
+        
+        stage('Packer execution') {
+            environment {
+                DOCKERHUB_USERNAME = credentials('dockerhub_username')
+                DOCKERHUB_PASSWORD = credentials('dockerhub_password')
+            }
+            steps{
+                sh 'packer init docker-with-jar.pkr.hcl'
+                sh 'packer build -var "username=$DOCKERHUB_USERNAME" -var "password=$DOCKERHUB_PASSWORD" docker-with-jar.pkr.hcl'
             }
         }
     }
