@@ -12,7 +12,7 @@ source "docker" "ubuntu" {
   commit = true
   changes = [
       "EXPOSE 8085",
-      "ENTRYPOINT [\"java\", \"-jar\", \"/Calculator.jar\"]"
+      "ENTRYPOINT [\"java\", \"-jar\", \"/Tema-final-1-0.0.1-SNAPSHOT.jar\"]"
     ]
 }
 
@@ -27,7 +27,7 @@ variable "password" {
 }
 
 build {
-  name = "Job2"
+  name = "job-2"
   sources = [
     "source.docker.ubuntu"
   ]
@@ -40,17 +40,17 @@ build {
   }
   
   provisioner "file" {
-    source = "./Calculator.jar"
-    destination = "/Calculator.jar"
+    source = "./Tema-final-1-0.0.1-SNAPSHOT.jar"
+    destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
   }
   
   provisioner "ansible-local" {
-     playbook_file = "./playbook.yml"
+     playbook_file = "./job-2/playbook.yml"
   }
   
   post-processors {
     post-processor "docker-tag" {
-        repository =  "yagojanos/temafinal1"
+        repository =  "brunnadocker/brunna-dornelles-tema-final-1"
         tags = ["0.1"]
     }
     post-processor "docker-push" {
