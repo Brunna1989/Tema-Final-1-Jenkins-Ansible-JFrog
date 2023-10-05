@@ -13,6 +13,7 @@ pipeline {
                     def jfrogUrl = 'http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar'
                     def downloadPath = "${env.WORKSPACE}/Tema-final-1-0.0.1-SNAPSHOT.jar"
 
+                    // Use o comando 'curl' no ambiente de script
                     sh "curl -u admin:$jfrogPassword -o $downloadPath $jfrogUrl"
                 }
             }
@@ -36,7 +37,7 @@ pipeline {
                       }],
                       "provisioners": [{
                         "type": "ansible",
-                        "playbook_file": "ansible-playbook.yml"
+                        "playbook_file": "job-2/ansible-playbook.yml"
                       }]
                     }
                     '''
