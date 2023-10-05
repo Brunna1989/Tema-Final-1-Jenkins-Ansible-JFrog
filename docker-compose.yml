@@ -1,10 +1,13 @@
+#docker-compose.yml utilizado para execução dos dois containers e trabahando em conjunto com o Dockerfile, para que dentro do container Jenkins
+#haja a instalação prévia do Packer e Ansible. (Não está sendo utilizando para buildar a imagem, conforme delegado no tema em questão).
+
 version: '3'
 
 services:
   jenkins:
     build:
       context: .
-      dockerfile: Dockerfile  # Use o Dockerfile personalizado
+      dockerfile: Dockerfile  
     container_name: jenkins
     volumes:
       - jenkins_home:/var/jenkins_home
