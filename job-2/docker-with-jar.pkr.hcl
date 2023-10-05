@@ -39,10 +39,11 @@ build {
     ]
   }
   
- provisioner "file" {
-    source = "./Tema-final-1-0.0.1-SNAPSHOT.jar"
+provisioner "file" {
+    source      = "./Tema-final-1/.gradle/build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"
     destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
-  }
+}
+
   
   provisioner "ansible-local" {
      playbook_file = "./job-2/playbook.yml"
