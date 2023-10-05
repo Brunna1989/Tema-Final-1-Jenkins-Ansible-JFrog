@@ -1,0 +1,56 @@
+{
+  "variables": {
+    "dockerhub_username": "",
+    "dockerhub_password": "",
+    "tomcat_dir": "/home/ilegra/.jenkins/workspace/job-02-infra/job-1/build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"
+  },
+
+  "builders": [
+    {
+      "type": "docker",
+      "image": "ubuntu:20.04",
+      "commit": true,
+      "author": "brunna.dornelles@ilegra.com",
+      "changes": [
+        "EXPOSE 8080",
+        "CMD [\"apache-tomcat-10.0.12/bin/catalina.sh\", \"run\"]"
+      ]
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "apt-get update",
+        "apt-get install ansible -y"
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "/home/ilegra/.jenkins/workspace/job-2/playbook.yml"
+    },
+    {
+      "type": "file",
+      "source":  "{{user `tomcat_dir`}}",
+      "destination": "/apache-tomcat-10.0.12/webapps/Tema-final-1-0.0.1-SNAPSHOT.jar"
+    }
+  ],
+
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "brunnadocker/brunna-dornelles-tema-final-1",
+        "tags": ["1.0", "latest"]
+      },
+      {
+        "type": "docker-push",
+        "login": true,
+        "login_username": "{{user `dockerhub_username`}}",
+        "login_password": "{{user `dockerhub_password`}}"
+      }
+    ]
+  ]
+
+
