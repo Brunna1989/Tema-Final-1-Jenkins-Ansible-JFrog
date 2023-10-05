@@ -39,10 +39,10 @@ build {
     ]
   }
   
-  provisioner "file" {
-    source      = "./Tema-final-1-0.0.1-SNAPSHOT.jar"
+ provisioner "file" {
+    source      = "/var/jenkins_home/workspace/job-1-upload-artefato-jfrog/build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"
     destination = "/Tema-final-1-0.0.1-SNAPSHOT.jar"
-  }
+}
   
   provisioner "ansible-local" {
      playbook_file = "./job-2/playbook.yml"
