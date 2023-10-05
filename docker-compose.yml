@@ -2,7 +2,6 @@ version: '3'
 
 services:
   jenkins:
-    image: jenkins/jenkins:lts
     build:
       context: .
       dockerfile: Dockerfile  # Use o Dockerfile personalizado
@@ -33,3 +32,4 @@ networks:
 
 volumes:
   jenkins_home:
+
