@@ -1,31 +1,54 @@
 pipeline {
     agent any
 
+    environment {
+        CI = 'true'
+    }
+
     stages {
-
-        stage('Retrieving WAR file from JFrog Artifactory') {
+        stage('Download JAR from JFrog') {
             steps {
-                rtDownload(
-                    serverId: "tema-final-1-job-1",
-                    spec: """{
-                        "files": [
-                        {
-                            "pattern": "tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar",
-                            "target": "job-1/build/libs/Tema-final-1-0.0.1-SNAPSHOT.jar"
-                        }
-                        ]
-                    } """
+                script {
+                    def jfrogUrl = 'http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar'
+                    def jfrogUser = 'admin'
+                    def jfrogPassword = credentials('token_jfrog')
 
-                    )
+                    sh "curl -u $jfrogUser:$jfrogPassword -o app.jar $jfrogUrl"
+                }
             }
         }
 
-        stage('Building a Docker image through Packer and pushing to Docker Hub') {
-        steps {
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                sh "packer build --var dockerhub_username=$DOCKERHUB_USERNAME --var dockerhub_password=$DOCKERHUB_PASSWORD job-02/packerConfigurations.json"
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def packerConfig = 'packerConfigurations.json'
+                    def packerVarFile = 'packer_vars.json'
+
+                    writeFile file: packerVarFile, text: """
+                    {
+                      "dockerhub_username": "",
+                      "dockerhub_password": "",
+                      "tomcat_dir": "/apache-tomcat-10.0.12/webapps/Tema-final-1-0.0.1-SNAPSHOT.jar"
+                    }
+                    """
+
+                    sh "packer build -var-file=$packerVarFile $packerConfig"
+                }
             }
-          }
+        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    def dockerhubUsername = credentials('dockerhub-credentials').USUARIO
+                    def dockerhubPassword = credentials('dockerhub-credentials').SENHA
+                    def imageTag = "brunnadocker/brunna-dornelles-tema-final-1:1.0"  // Defina a tag desejada
+
+                    sh "docker login -u $dockerhubUsername -p $dockerhubPassword"
+                    sh "docker tag ubuntu:20.04 $imageTag"
+                    sh "docker push $imageTag"
+                }
+            }
         }
     }
 }
