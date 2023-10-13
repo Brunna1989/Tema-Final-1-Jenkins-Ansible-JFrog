@@ -13,15 +13,10 @@ source "docker" "ubuntu" {
   changes = [
     "EXPOSE 8085",
     "ENTRYPOINT [\"java\", \"-jar\", \"/Tema-final-1-0.0.1-SNAPSHOT.jar\"]"
-  ]
+  }
 }
 
-variable "username" {
-  type    = string
-  default = ""
-}
-
-variable "password" {
+variable "token" {
   type    = string
   default = ""
 }
@@ -55,11 +50,9 @@ build {
     }
 
     post-processor "docker-push" {
-      login          = true
-      login_username = var.username
-      login_password = var.password
+      login      = true
+      token      = var.token
     }
   }
 }
-
 
