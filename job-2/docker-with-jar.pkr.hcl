@@ -50,8 +50,9 @@ build {
     }
 
     post-processor "docker-push" {
-      login      = true
-      token      = var.token
+      login = true
+      token = var.token
     }
   }
 }
+
