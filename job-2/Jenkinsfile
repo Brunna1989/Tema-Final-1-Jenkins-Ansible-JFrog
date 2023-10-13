@@ -18,12 +18,11 @@ pipeline {
 
         stage('Packer execution') {
             environment {
-                DOCKERHUB_USERNAME = credentials('dockerhub_username')
-                DOCKERHUB_PASSWORD = credentials('dockerhub_password')
+                DOCKERHUB_TOKEN = credentials('dockerhub_token')
             }
             steps {
                 sh 'packer init job-2/docker-with-jar.pkr.hcl'
-                sh 'packer build -var "username=$DOCKERHUB_USERNAME" -var "password=$DOCKERHUB_PASSWORD" job-2/docker-with-jar.pkr.hcl'
+                sh 'packer build -var "token=$DOCKERHUB_TOKEN" job-2/docker-with-jar.pkr.hcl'
             }
         }
     }
