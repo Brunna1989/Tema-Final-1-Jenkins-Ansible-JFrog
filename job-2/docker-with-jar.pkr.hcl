@@ -16,11 +16,6 @@ source "docker" "ubuntu" {
   ]
 }
 
-variable "token" {
-  type    = string
-  default = ""
-}
-
 build {
   name = "job-2"
   sources = ["source.docker.ubuntu"]
@@ -46,10 +41,6 @@ build {
       repository = "brunnadocker/tema-final-1"
       tags       = ["0.1"]
     }
-
-    post-processor "docker-push" {
-      login = true
-      token = var.token
-    }
   }
 }
+
