@@ -16,12 +16,7 @@ source "docker" "ubuntu" {
   ]
 }
 
-variable "username" {
-  type    = string
-  default = ""
-}
-
-variable "password" {
+variable "token" {
   type    = string
   default = ""
 }
@@ -55,9 +50,8 @@ build {
     }
 
     post-processor "docker-push" {
-      login          = true
-      login_username = var.username
-      login_password = var.password
+      login = true
+      token = var.token
     }
   }
 }
