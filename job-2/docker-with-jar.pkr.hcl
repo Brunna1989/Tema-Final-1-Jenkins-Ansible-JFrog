@@ -4,7 +4,6 @@ packer {
       version = ">= 1.0.1"
       source  = "github.com/hashicorp/docker"
     }
-  }
 }
 
 source "docker" "ubuntu" {
@@ -14,11 +13,6 @@ source "docker" "ubuntu" {
     "EXPOSE 8085",
     "ENTRYPOINT [\"java\", \"-jar\", \"/Tema-final-1-0.0.1-SNAPSHOT.jar\"]"
   ]
-}
-
-variable "token" {
-  type    = string
-  default = ""
 }
 
 build {
@@ -51,8 +45,6 @@ build {
 
     post-processor "docker-push" {
       login = true
-      token = var.token
     }
   }
 }
-
