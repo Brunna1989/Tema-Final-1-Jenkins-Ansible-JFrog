@@ -4,7 +4,6 @@ packer {
       version = ">= 1.0.1"
       source  = "github.com/hashicorp/docker"
     }
-  }
 }
 
 source "docker" "ubuntu" {
