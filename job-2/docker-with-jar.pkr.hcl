@@ -13,7 +13,8 @@ source "docker" "ubuntu" {
   changes = [
     "EXPOSE 8085",
     "ENTRYPOINT [\"java\", \"-jar\", \"/Tema-final-1-0.0.1-SNAPSHOT.jar\"]"
-  }
+    # Adicione uma vírgula após cada elemento
+  ]
 }
 
 variable "token" {
@@ -55,4 +56,3 @@ build {
     }
   }
 }
-
