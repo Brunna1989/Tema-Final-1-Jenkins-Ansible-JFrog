@@ -1,12 +1,14 @@
 pipeline {
     agent any
+    environment {
+        DOCKERHUB_TOKEN = credentials('dockerhub_token')
+        DOCKERHUB_USERNAME = credentials('dockerhub_username')
+        DOCKERHUB_PASSWORD = credentials('dockerhub_password')
+    }
     stages {
         stage('Download Jar from JFROG') {
-            environment {
-                JFROG_PASSWORD = credentials('token_jfrog')
-            }
             steps {
-                sh 'curl -u admin:$JFROG_PASSWORD -XGET http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar --output Tema-final-1-0.0.1-SNAPSHOT.jar'
+                sh 'curl -u admin:$DOCKERHUB_TOKEN -XGET http://artifactory:8082/artifactory/tema-final-1-job-1/Tema-final-1-0.0.1-SNAPSHOT.jar --output Tema-final-1-0.0.1-SNAPSHOT.jar'
             }
         }
 
@@ -17,12 +19,9 @@ pipeline {
         }
 
         stage('Packer execution') {
-            environment {
-                DOCKERHUB_TOKEN = credentials('dockerhub_token')
-            }
             steps {
                 sh 'packer init job-2/docker-with-jar.pkr.hcl'
-                sh "export DOCKERHUB_TOKEN=${DOCKERHUB_TOKEN} && packer build job-2/docker-with-jar.pkr.hcl"
+                sh "packer build -var 'token=${DOCKERHUB_TOKEN}' job-2/docker-with-jar.pkr.hcl"
             }
         }
     }
