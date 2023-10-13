@@ -50,7 +50,7 @@ build {
 
   post-processors {
     post-processor "docker-tag" {
-      repository = "brunnadocker/brunna-dornelles-tema-final-1"
+      repository = "brunnadocker/tema-final-1"
       tags       = ["0.1"]
     }
 
