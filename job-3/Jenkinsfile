@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Pull Dockerhub') {
             steps {
-                sh 'docker pull brunnadocker/brunna-dornelles-tema-final-1'
+                sh 'docker pull brunnadocker/brunna-dornelles-tema-final-1:0.1'
             }
         }
         stage('Docker run') {
