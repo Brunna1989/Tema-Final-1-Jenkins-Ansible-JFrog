@@ -24,6 +24,7 @@ pipeline {
 
         stage('Packer execution') {
             steps {
+                sh 'apt-get update'
                 sh 'packer init job-2/docker-with-jar.pkr.hcl'
                 sh 'packer build job-2/docker-with-jar.pkr.hcl'
             }
