@@ -29,5 +29,19 @@ pipeline {
                 sh 'packer build job-2/docker-with-jar.pkr.hcl'
             }
         }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    def dockerhubCredentials = credentials('dockerhub_token') // Substitua pelo ID da credencial no Jenkins
+
+                    withDockerServer([credentialsId: dockerhubCredentials]) {
+                        // Faça o push da imagem para o Docker Hub
+                        sh "docker push brunnadocker/tema-final-1:0.1"
+                    }
+                }
+            }
+        }
     }
 }
+
