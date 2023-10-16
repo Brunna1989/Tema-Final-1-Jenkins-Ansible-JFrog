@@ -25,23 +25,9 @@ pipeline {
         stage('Packer execution') {
             steps {
                 sh 'apt-get update'
-                sh 'packer init job-2/packer-configurations.hcl'
-                sh 'packer build job-2/packer-configurations.hcl'
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    def dockerhubCredentials = credentials('dockerhub_token') // Substitua pelo ID da credencial no Jenkins
-
-                    withDockerServer([credentialsId: dockerhubCredentials]) {
-                        // Faça o push da imagem para o Docker Hub
-                        sh "docker push brunnadocker/tema-final-1-job-2:0.1"
-                    }
-                }
+                sh 'packer init job-2/docker-with-jar.pkr.hcl'
+                sh 'packer build job-2/docker-with-jar.pkr.hcl'
             }
         }
     }
 }
-
