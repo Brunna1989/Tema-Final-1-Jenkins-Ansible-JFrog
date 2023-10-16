@@ -39,7 +39,7 @@ build {
 
   post-processors {
     post-processor "docker-tag" {
-      repository = "brunnadocker/tema-final-1-job-2"
+      repository = "brunnadocker/tema-final-1"
       tags       = ["0.1"]
     }
   }
