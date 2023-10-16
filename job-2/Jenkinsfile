@@ -37,7 +37,7 @@ pipeline {
 
                     withDockerServer([credentialsId: dockerhubCredentials]) {
                         // Faça o push da imagem para o Docker Hub
-                        sh "docker push brunnadocker/tema-final-1:0.1"
+                        sh "docker push brunnadocker/tema-final-1-job-2:brunnadocker/tema-final-1"
                     }
                 }
             }
