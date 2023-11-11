@@ -200,4 +200,25 @@ Você pode interromper a aplicação a qualquer momento com o seguinte comando:
 
 **docker stop + id do contêiner**
 
+## Acessando as Plataformas Necessárias
+
+- **Jenkins:** [http://localhost:8080](http://localhost:8080)
+- **JFrog Artifactory:** [http://localhost:8082](http://localhost:8082)
+- **Aplicação Calculadora via contêiner:** [http://localhost:8085/calculator/operação/number1/number2
+- **Aplicação Calculadora via App:** [http://localhost:8083/calculator/operação/number1/number2
+
+## Utilizando a Calculadora
+
+A aplicação oferece as seguintes operações:
+
+- **Adição (sum)**
+- **Subtração (subtraction)**
+- **Multiplicação (multiplication)**
+- **Divisão (division)**
+- **Exponenciação (exponentiation)**
+
+Para executar uma operação, forneça aperação desejada, como acima descrito e os dois números como parâmetros para os campos "number1" e "number2" para a função. 
+
+O histórico de operações é apresentado na página, junto ao resultado da operação atual. Divirta-se e bons cálculos!
+
 
