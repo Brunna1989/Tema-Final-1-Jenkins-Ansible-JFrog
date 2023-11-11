@@ -87,8 +87,7 @@ A configuração do JFrog Artifactory é um passo crucial no gerenciamento dos a
 
 | Configuração         | Nome                      |
 | -------------------- | -------------------------  |
-| JFrog Repository Key |       tema-final-01-job-1                    |
-
+| JFrog Repository Key | tema-final-01-job-1       |
 
 # Configuração do Projeto
 
@@ -100,10 +99,10 @@ Este guia descreve os passos necessários para configurar e executar o projeto d
 
 2. Escolha a opção "Add JFrog Platform" e preencha os campos vazios. O "Instance ID" será o nome que você usará para se referir ao seu Artifactory posteriormente. A "URL" geralmente é mantida em 8082, especialmente se a configuração estiver local. As credenciais são aquelas criadas previamente para acesso à plataforma.
 
-   | Configuração                | Nome                                                         |
-       | --------------------------- |--------------------------------------------------------------|
-   | Instance ID                 | tema-final-1-job-1                                           |
-   | JFrog Platform URL          | http://artifactory:8082                                      |
+   | Configuração                | Nome                            |
+   | --------------------------- |---------------------------------|
+   | Instance ID                 | tema-final-1-job-1              |
+   | JFrog Platform URL          | http://artifactory:8082         |
    | Default Deployer Credentials | Usuário e Senha do JFrog Artifactory configurados no Jenkins |
 
 3. Você pode alterar os nomes conforme necessário, mas lembre-se de atualizar os trechos que se referem a eles posteriormente.
@@ -119,7 +118,7 @@ O Docker Hub é necessário para os Jobs 02 e 03. Esses Jobs requerem o envio e 
 2. Selecione a opção "Create Repository". Defina o nome e marque a opção "Public". Preste atenção ao nome escolhido, pois ele será usado mais tarde.
 
    | Configuração           | Nome                      |
-       | ---------------------- |---------------------------|
+   | ---------------------- |---------------------------|
    | Docker Hub Repository  | brunnadocker/tema-final-1 |
 
 3. Vá para "Account Settings" -> "Security" e gere um novo token com permissões de leitura, escrita e exclusão. Salve este token em um local seguro, pois você não poderá vê-lo novamente.
@@ -127,7 +126,7 @@ O Docker Hub é necessário para os Jobs 02 e 03. Esses Jobs requerem o envio e 
 4. Retorne ao Jenkins e vá para "Manage Jenkins" -> "Manage Credentials" -> "Domain (global)" -> "Add Credentials". Preencha os campos de usuário e senha (token) com as informações que acabou de criar. Escolha a opção "Username with Password" e salve a configuração.
 
    | Configuração          | Nome                          |
-       | --------------------- |-------------------------------|
+   | --------------------- |-------------------------------|
    | Kind                  | Username with Password        |
    | ID                    | dockerhub_token               |
    | Username, Password    | Usuário e Token do Docker Hub |
@@ -184,7 +183,8 @@ Siga estas instruções para executar o job-3:
 
 Para verificar a execução da aplicação Calculadora, digite o seguinte comando no terminal:
 
-docker container ls -a
+**docker container ls -a**
+
 
 # Uso da Aplicação Calculadora
 
@@ -198,25 +198,6 @@ Isso significa que a aplicação Calculadora está funcionando corretamente no e
 
 Você pode interromper a aplicação a qualquer momento com o seguinte comando:
 
-docker stop + id do contêiner
+**docker stop + id do contêiner**
 
-## Acessando as Plataformas Necessárias
 
-- **Jenkins:** [http://localhost:8080](http://localhost:8080)
-- **JFrog Artifactory:** [http://localhost:8082](http://localhost:8082)
-- **Aplicação Calculadora via contêiner:** [http://localhost:8085/calculator/operação/number1/number2
-- **Aplicação Calculadora via App:** [http://localhost:8083/calculator/operação/number1/number2
-
-## Utilizando a Calculadora
-
-A aplicação oferece as seguintes operações:
-
-- **Adição (sum)**
-- **Subtração (subtraction)**
-- **Multiplicação (multiplication)**
-- **Divisão (division)**
-- **Exponenciação (exponentiation)**
-
-Para executar uma operação, forneça aperação desejada, como acima descrito e os dois números como parâmetros para os campos "number1" e "number2" para a função. 
-
-O histórico de operações é apresentado na página, junto ao resultado da operação atual. Divirta-se e bons cálculos!
